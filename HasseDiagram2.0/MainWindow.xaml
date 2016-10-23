@@ -1,0 +1,22 @@
+﻿<Window x:Class="HasseDiagram2._0.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:HasseDiagram2._0"
+        mc:Ignorable="d"
+        Title="MainWindow" Height="350" Width="525">
+    <Grid>
+        
+        <Grid.RowDefinitions>
+            <RowDefinition Height="52.92"/>
+            <RowDefinition Height="*"/>
+        </Grid.RowDefinitions>
+        <TextBlock>Enter letters used for powerset:</TextBlock>
+        <TextBox KeyDown="txt_vars_KeyDown" Text= "a,b,c,d" Width="300px" Height="20px" HorizontalAlignment="Right" VerticalAlignment="Top" Name="txt_vars"></TextBox>
+        <Border Grid.Row="1" Name="border">
+            <Image Name="img_graph" Opacity="1" RenderTransformOrigin="0.5,0.5"  />
+        </Border>
+
+    </Grid>
+</Window>
