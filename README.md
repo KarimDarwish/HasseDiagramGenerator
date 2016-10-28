@@ -7,6 +7,7 @@ Creates a Hasse Diagram from a given powerset
 
 ## Credits
 [GraphViz](http://www.graphviz.org/)
+
 [GraphViz.NET Wrapper by Jamie Dixon](https://github.com/JamieDixon/GraphViz-C-Sharp-Wrapper)
 
 
