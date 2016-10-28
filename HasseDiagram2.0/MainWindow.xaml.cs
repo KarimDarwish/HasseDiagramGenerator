@@ -15,7 +15,7 @@ namespace HasseDiagram2._0
     /// <summary>
     ///     Interaction logic for MainWindow.xaml
     /// </summary>
-    public partial class MainWindow : Window
+    public partial class MainWindow
     {
         private readonly GraphGeneration _wrapperForGraph;
         private Point _origin;
@@ -32,11 +32,11 @@ namespace HasseDiagram2._0
             group.Children.Add(xform);
             var tt = new TranslateTransform();
             group.Children.Add(tt);
-            img_graph.RenderTransform = group;
-            img_graph.MouseWheel += image_MouseWheel;
-            img_graph.MouseLeftButtonDown += image_MouseLeftButtonDown;
-            img_graph.MouseLeftButtonUp += image_MouseLeftButtonUp;
-            img_graph.MouseMove += image_MouseMove;
+            ImgGraph.RenderTransform = group;
+            ImgGraph.MouseWheel += image_MouseWheel;
+            ImgGraph.MouseLeftButtonDown += image_MouseLeftButtonDown;
+            ImgGraph.MouseLeftButtonUp += image_MouseLeftButtonUp;
+            ImgGraph.MouseMove += image_MouseMove;
 
             #endregion
 
@@ -53,9 +53,10 @@ namespace HasseDiagram2._0
 
         private void GetGraph(IGraphGeneration wrapper)
         {
-            var set = txt_vars.Text.Split(',');
+            var set = TxtVars.Text.Split(',');
             var sb = new StringBuilder();
             sb.Append("digraph{");
+            sb.AppendLine("graph [ranksep=\"" + TxtDistance.Text + "\", nodesep=\"" + TxtDistance.Text +"\"];");
             for (int i = 0, max = 1 << set.Length; i < max; i++)
             {
                 var newList = new List<string>();
@@ -73,7 +74,7 @@ namespace HasseDiagram2._0
             var img = LoadImage(output);
             Width = img.Width + 20;
             Height = img.Height + 20;
-            img_graph.Source = LoadImage(output);
+            ImgGraph.Source = LoadImage(output);
         }
 
         private static BitmapImage LoadImage(byte[] imageData)
@@ -129,34 +130,34 @@ namespace HasseDiagram2._0
 
         private void image_MouseLeftButtonUp(object sender, MouseButtonEventArgs e)
         {
-            img_graph.ReleaseMouseCapture();
+            ImgGraph.ReleaseMouseCapture();
         }
 
         private void image_MouseMove(object sender, MouseEventArgs e)
         {
-            if (!img_graph.IsMouseCaptured) return;
+            if (!ImgGraph.IsMouseCaptured) return;
 
             var tt =
                 (TranslateTransform)
-                ((TransformGroup) img_graph.RenderTransform).Children.First(tr => tr is TranslateTransform);
-            var v = _start - e.GetPosition(border);
+                ((TransformGroup) ImgGraph.RenderTransform).Children.First(tr => tr is TranslateTransform);
+            var v = _start - e.GetPosition(Border);
             tt.X = _origin.X - v.X;
             tt.Y = _origin.Y - v.Y;
         }
 
         private void image_MouseLeftButtonDown(object sender, MouseButtonEventArgs e)
         {
-            img_graph.CaptureMouse();
+            ImgGraph.CaptureMouse();
             var tt =
                 (TranslateTransform)
-                ((TransformGroup) img_graph.RenderTransform).Children.First(tr => tr is TranslateTransform);
-            _start = e.GetPosition(border);
+                ((TransformGroup) ImgGraph.RenderTransform).Children.First(tr => tr is TranslateTransform);
+            _start = e.GetPosition(Border);
             _origin = new Point(tt.X, tt.Y);
         }
 
         private void image_MouseWheel(object sender, MouseWheelEventArgs e)
         {
-            var transformGroup = (TransformGroup) img_graph.RenderTransform;
+            var transformGroup = (TransformGroup) ImgGraph.RenderTransform;
             var transform = (ScaleTransform) transformGroup.Children[0];
 
             var zoom = e.Delta > 0 ? .2 : -.2;

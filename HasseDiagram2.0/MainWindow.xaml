@@ -7,15 +7,18 @@
         mc:Ignorable="d"
         Title="MainWindow" Height="350" Width="525">
     <Grid>
-        
+
         <Grid.RowDefinitions>
-            <RowDefinition Height="52.92"/>
+            <RowDefinition Height="22.92"/>
+            <RowDefinition Height="20.50"/>
             <RowDefinition Height="*"/>
         </Grid.RowDefinitions>
         <TextBlock>Enter letters used for powerset:</TextBlock>
-        <TextBox KeyDown="txt_vars_KeyDown" Text= "a,b,c,d" Width="300px" Height="20px" HorizontalAlignment="Right" VerticalAlignment="Top" Name="txt_vars"></TextBox>
-        <Border Grid.Row="1" Name="border">
-            <Image Name="img_graph" Opacity="1" RenderTransformOrigin="0.5,0.5" />
+        <TextBox Grid.Row="0" KeyDown="txt_vars_KeyDown" Text= "a,b,c,d"  Height="20px" HorizontalAlignment="Right" VerticalAlignment="Top" Name="TxtVars" Width="150"></TextBox>
+        <TextBlock Grid.Row="1">Distance between Nodes:</TextBlock>
+        <TextBox Width="150" HorizontalAlignment="Right" Grid.Row="1"  Text="2" Name="TxtDistance"/>
+        <Border Grid.Row="2" Name="Border">
+            <Image Name="ImgGraph" Opacity="1" RenderTransformOrigin="0.5,0.5" />
         </Border>
 
     </Grid>
