@@ -1,4 +1,6 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
+using System.Globalization;
 using System.IO;
 using System.Linq;
 using System.Text;
@@ -24,7 +26,7 @@ namespace HasseDiagram2._0
         public MainWindow()
         {
             InitializeComponent();
-
+    
             #region "zooming"
 
             var group = new TransformGroup();
@@ -39,7 +41,7 @@ namespace HasseDiagram2._0
             ImgGraph.MouseMove += image_MouseMove;
 
             #endregion
-
+            #region "Initializing GraphViz.NET"
             var getStartProcessQuery = new GetStartProcessQuery();
             var getProcessStartInfoQuery = new GetProcessStartInfoQuery();
             var registerLayoutPluginCommand = new RegisterLayoutPluginCommand(getProcessStartInfoQuery,
@@ -49,20 +51,24 @@ namespace HasseDiagram2._0
                 getProcessStartInfoQuery,
                 registerLayoutPluginCommand);
             _wrapperForGraph = wrapper;
+#endregion
         }
 
+      
         private void GetGraph(IGraphGeneration wrapper)
         {
             var set = TxtVars.Text.Split(',');
+            TxtNumOfSubsets.Text = Math.Pow(2, set.Length).ToString(CultureInfo.InvariantCulture);
             var sb = new StringBuilder();
             sb.Append("digraph{");
             sb.AppendLine("graph [ranksep=\"" + TxtDistance.Text + "\", nodesep=\"" + TxtDistance.Text +"\"];");
-            for (int i = 0, max = 1 << set.Length; i < max; i++)
+            for (var i = 0; i < Math.Pow(2,set.Length); i++)
             {
                 var newList = new List<string>();
                 for (var j = 0; j < set.Length; j++)
                 {
-                    var isList = i & (1 << j);
+                    var isList = i & (1 << j); 
+                   
                     if (isList > 0)
                         newList.Add(set[j]);
                 }
@@ -95,18 +101,16 @@ namespace HasseDiagram2._0
             return image;
         }
 
-        private static void PrintLinks(List<string> list, string[] arr, StringBuilder sb)
+        private static void PrintLinks(List<string> list, IEnumerable<string> arr, StringBuilder sb)
         {
             foreach (var value in arr)
             {
-                if (list.Contains(value) == false)
-                {
-                    var newList = new List<string>();
-                    newList.AddRange(list);
-                    newList.Add(value);
-                    sb.Append(GetListAsString(newList) + " -> " + GetListAsString(list) + "[dir=back];"
-                                                  + " \n");
-                }
+                if (list.Contains(value)) continue;
+                var newList = new List<string>();
+                newList.AddRange(list);
+                newList.Add(value);
+                sb.Append(GetListAsString(newList) + " -> " + GetListAsString(list) + "[dir=back];"
+                          + " \n");
             }
         }
 
@@ -115,17 +119,7 @@ namespace HasseDiagram2._0
             set.Sort();
             if (set.Count == 0)
                 return "\"{}\"";
-            var sb = new StringBuilder();
-            sb.Append("\"{");
-            for (var i = 0; i < set.Count; i++)
-            {
-                var value = set[i];
-                sb.Append(value);
-                if (i != set.Count - 1)
-                    sb.Append(",");
-            }
-            sb.Append("}\"");
-            return sb.ToString();
+            return "\"{" + string.Join(",", set.ToArray()) + "}\"";
         }
 
         private void image_MouseLeftButtonUp(object sender, MouseButtonEventArgs e)
